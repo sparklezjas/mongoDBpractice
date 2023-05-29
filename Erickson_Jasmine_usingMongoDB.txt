@@ -1,0 +1,196 @@
+C:\Users\mom2s\cmder
+λ cd c:\Program Files\MongoDB\Server\5.0\bin
+
+c:\Program Files\MongoDB\Server\5.0\bin
+λ mongo.exe
+MongoDB shell version v5.0.18
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("5af6f30d-ff4e-430a-ba68-749cb94e1658") }
+MongoDB server version: 5.0.18
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2023-05-27T15:15:15.289-05:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+> show dbs
+admin        0.000GB
+awesomeData  0.000GB
+config       0.000GB
+local        0.000GB
+> use my_first_db
+switched to db my_first_db
+> db.createCollection("students")
+{ "ok" : 1 }
+> db.students.insert({name: "Hawk", home_state: "Alabama", lucky_number: 17, birthday: {month:3, day: 15, year: 2002}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name: "Tom", home_state: "Texas", lucky_number: 32, birthday: {month: 10, day: 21, year: 1952}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name: "Lucy", home_state: "Minnesota", lucky_number: 5, birthday: {month: 6, day: 15, year: 2002}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name: "Freddy", home_state:"California", lucky_number: 72, birthday: {month: 10, day:27, year: 1982}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name: "Joy", home_state_:"Wisconsin", lucky_number: 7, birthday: {month: 1, day:16, year: 1978}})
+WriteResult({ "nInserted" : 1 })
+> db.students.find({})
+{ "_id" : ObjectId("64749c806a66e1801132393c"), "name" : "Hawk", "home_state" : "Alabama", "lucky_number" : 17, "birthday" : { "month" : 3, "day" : 15, "year" : 2002 } }
+{ "_id" : ObjectId("64749cd16a66e1801132393d"), "name" : "Tom", "home_state" : "Texas", "lucky_number" : 32, "birthday" : { "month" : 10, "day" : 21, "year" : 1952 } }
+{ "_id" : ObjectId("64749d1c6a66e1801132393e"), "name" : "Lucy", "home_state" : "Minnesota", "lucky_number" : 5, "birthday" : { "month" : 6, "day" : 15, "year" : 2002 } }
+{ "_id" : ObjectId("64749d7c6a66e1801132393f"), "name" : "Freddy", "home_state" : "California", "lucky_number" : 72, "birthday" : { "month" : 10, "day" : 27, "year" : 1982 } }
+{ "_id" : ObjectId("64749db96a66e18011323940"), "name" : "Joy", "home_state_" : "Wisconsin", "lucky_number" : 7, "birthday" : { "month" : 1, "day" : 16, "year" : 1978 } }
+> db.students.find({$or: [{home_state: 'California'}, {home_state: 'Washington'}]})
+{ "_id" : ObjectId("64749d7c6a66e1801132393f"), "name" : "Freddy", "home_state" : "California", "lucky_number" : 72, "birthday" : { "month" : 10, "day" : 27, "year" : 1982 } }
+> db.students.find({lucky_number: {$gt:3}})
+{ "_id" : ObjectId("64749c806a66e1801132393c"), "name" : "Hawk", "home_state" : "Alabama", "lucky_number" : 17, "birthday" : { "month" : 3, "day" : 15, "year" : 2002 } }
+{ "_id" : ObjectId("64749cd16a66e1801132393d"), "name" : "Tom", "home_state" : "Texas", "lucky_number" : 32, "birthday" : { "month" : 10, "day" : 21, "year" : 1952 } }
+{ "_id" : ObjectId("64749d1c6a66e1801132393e"), "name" : "Lucy", "home_state" : "Minnesota", "lucky_number" : 5, "birthday" : { "month" : 6, "day" : 15, "year" : 2002 } }
+{ "_id" : ObjectId("64749d7c6a66e1801132393f"), "name" : "Freddy", "home_state" : "California", "lucky_number" : 72, "birthday" : { "month" : 10, "day" : 27, "year" : 1982 } }
+{ "_id" : ObjectId("64749db96a66e18011323940"), "name" : "Joy", "home_state_" : "Wisconsin", "lucky_number" : 7, "birthday" : { "month" : 1, "day" : 16, "year" : 1978 } }
+> db.students.find({lucky_number: {$lte:10}})
+{ "_id" : ObjectId("64749d1c6a66e1801132393e"), "name" : "Lucy", "home_state" : "Minnesota", "lucky_number" : 5, "birthday" : { "month" : 6, "day" : 15, "year" : 2002 } }
+{ "_id" : ObjectId("64749db96a66e18011323940"), "name" : "Joy", "home_state_" : "Wisconsin", "lucky_number" : 7, "birthday" : { "month" : 1, "day" : 16, "year" : 1978 } }
+> db.students.find({lucky_number:{$gt:1, $lt:9}})
+{ "_id" : ObjectId("64749d1c6a66e1801132393e"), "name" : "Lucy", "home_state" : "Minnesota", "lucky_number" : 5, "birthday" : { "month" : 6, "day" : 15, "year" : 2002 } }
+{ "_id" : ObjectId("64749db96a66e18011323940"), "name" : "Joy", "home_state_" : "Wisconsin", "lucky_number" : 7, "birthday" : { "month" : 1, "day" : 16, "year" : 1978 } }
+> db.students.updateMany({}, {$set: {interests: ["coding", "brunch", "MongoDB"]}})
+{ "acknowledged" : true, "matchedCount" : 5, "modifiedCount" : 5 }
+> db.students.update({name: "Hawk"}, {$push:{interests: "karate"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({name: "Joy"}, {$push:{interests: "baking"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({name: "Lucy"}, {$push:{interests: "painting"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({name: "Tom"}, {$push:{interests: "golf"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({name: "Freddy"}, {$push:{interests: "geocaching"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.find({}).pretty()
+{
+        "_id" : ObjectId("64749c806a66e1801132393c"),
+        "name" : "Hawk",
+        "home_state" : "Alabama",
+        "lucky_number" : 17,
+        "birthday" : {
+                "month" : 3,
+                "day" : 15,
+                "year" : 2002
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "karate"
+        ]
+}
+{
+        "_id" : ObjectId("64749cd16a66e1801132393d"),
+        "name" : "Tom",
+        "home_state" : "Texas",
+        "lucky_number" : 32,
+        "birthday" : {
+                "month" : 10,
+                "day" : 21,
+                "year" : 1952
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "golf"
+        ]
+}
+{
+        "_id" : ObjectId("64749d1c6a66e1801132393e"),
+        "name" : "Lucy",
+        "home_state" : "Minnesota",
+        "lucky_number" : 5,
+        "birthday" : {
+                "month" : 6,
+                "day" : 15,
+                "year" : 2002
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "painting"
+        ]
+}
+{
+        "_id" : ObjectId("64749d7c6a66e1801132393f"),
+        "name" : "Freddy",
+        "home_state" : "California",
+        "lucky_number" : 72,
+        "birthday" : {
+                "month" : 10,
+                "day" : 27,
+                "year" : 1982
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "geocaching"
+        ]
+}
+{
+        "_id" : ObjectId("64749db96a66e18011323940"),
+        "name" : "Joy",
+        "home_state_" : "Wisconsin",
+        "lucky_number" : 7,
+        "birthday" : {
+                "month" : 1,
+                "day" : 16,
+                "year" : 1978
+        },
+        "interests" : [
+                "coding",
+                "brunch",
+                "MongoDB",
+                "baking"
+        ]
+}
+> db.students.update({name: "Hawk"}, {$push:{interests: "taxes"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({name: "Hawk"}, {$pull:{interests: "taxes"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.find({name: "Hawk"})
+{ "_id" : ObjectId("64749c806a66e1801132393c"), "name" : "Hawk", "home_state" : "Alabama", "lucky_number" : 17, "birthday" : { "month" : 3, "day" : 15, "year" : 2002 }, "interests" : [ "coding", "brunch", "MongoDB", "karate" ] }
+> db.students.remove({home_state:"California"})
+WriteResult({ "nRemoved" : 1 })
+> db.students.find({})
+{ "_id" : ObjectId("64749c806a66e1801132393c"), "name" : "Hawk", "home_state" : "Alabama", "lucky_number" : 17, "birthday" : { "month" : 3, "day" : 15, "year" : 2002 }, "interests" : [ "coding", "brunch", "MongoDB", "karate" ] }
+{ "_id" : ObjectId("64749cd16a66e1801132393d"), "name" : "Tom", "home_state" : "Texas", "lucky_number" : 32, "birthday" : { "month" : 10, "day" : 21, "year" : 1952 }, "interests" : [ "coding", "brunch", "MongoDB", "golf" ] }
+{ "_id" : ObjectId("64749d1c6a66e1801132393e"), "name" : "Lucy", "home_state" : "Minnesota", "lucky_number" : 5, "birthday" : { "month" : 6, "day" : 15, "year" : 2002 }, "interests" : [ "coding", "brunch", "MongoDB", "painting" ] } { "_id" : ObjectId("64749db96a66e18011323940"), "name" : "Joy", "home_state_" : "Wisconsin", "lucky_number" : 7, "birthday" : { "month" : 1, "day" : 16, "year" : 1978 }, "interests" : [ "coding", "brunch", "MongoDB", "baking" ] }
+db.students.remove({name:"Tom"})
+WriteResult({ "nRemoved" : 1 })
+> db.students.remove({lucky_number: {$gt:5}}, true)
+WriteResult({ "nRemoved" : 1 })
+> db.students.updateMany({}, {$set: {number_of_belts: 0}})                    
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+> db.students.updateMany({home_state: "Washington"}, {$inc:{number_of_belts: 1}})
+{ "acknowledged" : true, "matchedCount" : 0, "modifiedCount" : 0 }
+> db.students.updateMany({}, {$rename:{number_of_belts: "belts_earned"}})
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+> db.students.updateMany({}, {$unset:{'lucky_number':""}})                                                          
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }                                                  
+> db.students.updateMany({}, {$set: {'updated_on': Date()}})                                                        
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }                                                  
+> db.students.find()                                                                                                
+{ "_id" : ObjectId("64749d1c6a66e1801132393e"), "name" : "Lucy", "home_state" : "Minnesota", "birthday" : { "month" 
+: 6, "day" : 15, "year" : 2002 }, "interests" : [ "coding", "brunch", "MongoDB", "painting" ], "belts_earned" : 0, "
+updated_on" : "Mon May 29 2023 10:33:28 GMT-0500 (Central Daylight Time)" }                                         
+{ "_id" : ObjectId("64749db96a66e18011323940"), "name" : "Joy", "home_state_" : "Wisconsin", "birthday" : { "month" 
+: 1, "day" : 16, "year" : 1978 }, "interests" : [ "coding", "brunch", "MongoDB", "baking" ], "belts_earned" : 0, "up
+dated_on" : "Mon May 29 2023 10:33:28 GMT-0500 (Central Daylight Time)" }                                           
+>                                                                                                                   
+
+
+
+
+
